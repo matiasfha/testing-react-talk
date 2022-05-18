@@ -1,6 +1,3 @@
-import React from "react";
-
-/* 💡 Este es un arreglo de items para renderizar los elementos del menu */
 const items = [
     {
         icon: (
@@ -67,7 +64,6 @@ const items = [
     },
 ];
 
-/* 💡 Componente principal para renderizar la barra lateral del menu */
 const Sidebar = () => {
     return (
         <header className="h-screen flex justify-end">

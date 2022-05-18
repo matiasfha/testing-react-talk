@@ -1,4 +1,3 @@
-import React from 'react';
 import { Reply, Retweet, Like, Share } from '../assets/ToolbarImages';
 
 const images = [Reply, Retweet, Like, Share]

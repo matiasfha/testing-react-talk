@@ -1,8 +1,13 @@
 {
   "include": ["src"],
-  "exclude": ["**/*.spec.ts"],
+  "exclude": ["**/*.test.tsx"],
   "compilerOptions": {
-    "jsx": "react",
+    "allowJs": false,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "allowUmdGlobalAccess": true,
     "outDir": "dist",
     "target": "esnext",
     "module": "esnext",
@@ -12,7 +17,7 @@
     "sourceMap": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,
-    "types": ["vite/client"],
+    "types": ["vite/client","jest"],
     "resolveJsonModule": true,
   }
 }
