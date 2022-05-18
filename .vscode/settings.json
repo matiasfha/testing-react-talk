@@ -28,7 +28,7 @@
     "prettier.arrowParens": "avoid",
     "workbench.colorTheme": "Night Owl",
     "javascript.validate.enable": false,
-    "window.zoomLevel": 0,
+    "window.zoomLevel": 3,
     "editor.cursorBlinking": "solid",
     "editor.cursorStyle": "line",
     "editor.minimap.renderCharacters": false,

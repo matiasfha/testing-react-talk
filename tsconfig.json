@@ -17,7 +17,7 @@
     "sourceMap": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,
-    "types": ["vite/client","jest"],
+    "types": ["vite/client","jest", "@testing-library/jest-dom"],
     "resolveJsonModule": true,
   }
 }

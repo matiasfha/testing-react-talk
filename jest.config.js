@@ -1,10 +1,9 @@
 module.exports = {
   preset: 'ts-jest',
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
-  // roots: ['<rootDir>/src'],
   testRegex: '(/__tests__/.*.(test|spec)).(jsx?|tsx?)$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  collectCoverage: true,
+  collectCoverage: false,
   collectCoverageFrom: ['<rootDir>/src/**/*.{ts,tsx}'],
   coverageDirectory: '<rootDir>/coverage/',
   coveragePathIgnorePatterns: ['(tests/.*.mock).(jsx?|tsx?)$', '(.*).d.ts$', '<rootDir>/src/mocks'],
@@ -14,4 +13,6 @@ module.exports = {
   },
   testTimeout: 30000,
   moduleDirectories: ['node_modules', '<rootDir>/src'],
+  testEnvironment: "jsdom",
+  verbose: true,
 };

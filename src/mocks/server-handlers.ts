@@ -1,22 +1,7 @@
 import { rest } from 'msw';
-import { build, sequence, perBuild } from '@jackfranklin/test-data-bot'
-import { randFullName, randUserName, randRecentDate, randTextRange, seed } from '@ngneat/falso';
-
-const delay = import.meta.env.NODE_ENV === 'test' ? 0 : 1500;
-
-const tweetBuilder = build('Tweet', {
-  fields:
-  {
-    avatar: perBuild(() => `https://i.pravatar.cc/100?u=${randUserName()}`),
-    author: perBuild(() => randFullName()),
-    tag: perBuild(() => randUserName()),
-    date: perBuild(() => randRecentDate()),
-    content: perBuild(() => randTextRange({ min: 10, max: 280 })),
-    id: sequence()
-  },
-})
-
-const tweets = [...new Array(10)].map(() => tweetBuilder())
+import { sequence } from '@jackfranklin/test-data-bot'
+import { tweets } from './tweetsBuilder'
+const delay = process.env.NODE_ENV === 'test' ? 0 : 1500;
 
 
 export const handlers = [

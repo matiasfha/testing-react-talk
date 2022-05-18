@@ -13,10 +13,9 @@ const Toolbar = () => {
 
 
 
-const Tweet = ({ tweet }: { tweet: Tweet}) => {
-    
+export const Tweet = ({ tweet }: { tweet: Tweet}) => {    
     return (
-        <div className="tweet-card">
+        <div className="tweet-card" role="listitem">
             <img src={tweet.avatar} className="avatar" />
             <div className="container">
                 <h5 className="author">
@@ -32,7 +31,7 @@ const Tweet = ({ tweet }: { tweet: Tweet}) => {
 
 const TweetList = ({ tweets = [] }: { tweets: Tweet[]}) => {
     return (
-        <div className="tweets">
+        <div className="tweets" role="list">
             {tweets.map(tweet => {
                 return <Tweet key={tweet.id} tweet={tweet} />
             })}
