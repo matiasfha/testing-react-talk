@@ -36,7 +36,7 @@ export const handlers = [
         id: sequence() 
       }
       
-      return res(ctx.delay(delay), ctx.json([newTweet, ...tweets]))
+      return res(ctx.delay(delay), ctx.json(newTweet))
     }
     return res(ctx.delay(delay), ctx.status(400), ctx.json({ error: 'No tweet provided' }))
   })

@@ -1,51 +1,9 @@
 import React from 'react';
-import { Image, Gif, Poll, Emoticon, Schedule } from '../assets/ToolbarImages';
+import Header from './Header';
+import TweetForm from './TweetForm';
+
 import TweetList from './TweetList'
 
-
-const images = [Image, Gif, Poll, Emoticon, Schedule]
-const Toolbar = () => {
-    return (
-        <div className="tools-content">
-            {images.map((Item, index) => {
-                return <Item key={index} />
-            })}
-        </div>
-    )
-}
-
-const Header = () => {
-    return (
-        <div className="header">
-            <h2>Inicio</h2>
-        </div>
-    )
-}
-
-
-const TweetForm = ( { onSubmit }: {onSubmit: (tweet: string) => void }) => {
-    const textRef = React.useRef<HTMLTextAreaElement | null>(null)
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        onSubmit(textRef.current!.value)
-    }
-    return (
-        <form className="tweet-form" onSubmit={handleSubmit}>
-            <img src="" className="avatar" />
-            <div className="container">
-                {/* 💡 Aqui debes agregar el elemento textarea para capturar el texto del usuario */}
-                <textarea className="tweet-text" placeholder="¿Qué estás pensando?" ref={textRef}></textarea>
-                <div className="tools">
-                    <Toolbar />
-                    <button className="bg-dodger-blue  rounded-full py-3 px-6 h-12 w-56  text-white">
-                        Twittear
-                    </button> 
-                </div>
-            </div>
-        </form>
-    )
-}
 
 interface State {
     status: 'pending' | 'resolved' | 'rejected',
@@ -53,9 +11,9 @@ interface State {
     errorMessage: string | null
 }
 
-type ActionType = { type: 'START' } | { type: 'RESOLVE', responseData: Tweet[] } | { type: 'REJECT', error: Error }
+type ActionType = { type: 'START' } | { type: 'RESOLVE', responseData: Tweet[] } | { type: 'REJECT', error: Error } | { type: 'TWEETED', tweet: Tweet }
 
-function fetchReducer(state: State, action: ActionType): State {
+function tweetsReducer(state: State, action: ActionType): State {
     switch(action.type) {
         case 'START': 
             return {status: 'pending', responseData: [], errorMessage: null}
@@ -63,6 +21,9 @@ function fetchReducer(state: State, action: ActionType): State {
             return {status: 'resolved', responseData: action.responseData, errorMessage: null}
         case 'REJECT':
             return {status: 'rejected', responseData: [], errorMessage: action.error.message}
+        case 'TWEETED':
+            console.log({ state, action })
+            return {...state, responseData: [action.tweet, ...state.responseData]}
         default:
             return state
     }
@@ -73,22 +34,27 @@ const initialState: State = {
     responseData: [],
     errorMessage: null
 }
-const Main = () => {
-    const [state, dispatch] = React.useReducer(fetchReducer, initialState)
 
+interface UseFetchTweetsArgs  {
+    onResolve: (responseData: Tweet[]) => void, onReject: (error: Error) => void
+}
+const useFetchTweets = ({ onResolve, onReject }: UseFetchTweetsArgs) => {
     React.useEffect(() => {
         fetch('/api/tweets')
             .then(response => response.json())
             .then(responseData => {
-                dispatch({type: 'RESOLVE', responseData})
+                onResolve(responseData)
             })
             .catch(error => {
-                dispatch({type: 'REJECT', error})
+                onReject(error)
             })
     }, [])
+}
 
-    const onSubmit = (tweet: string) => {
-        dispatch({ type: 'START'})
+interface UseSubmitTweetArgs { onStart: () => void, onResolve: (tweet: Tweet) => void, onReject: (error: Error) => void }
+const useSubmitTweet = ({ onStart, onResolve, onReject }: UseSubmitTweetArgs) => {
+    return (tweet: string ) => {
+        onStart()
         fetch('/api/tweets', {
             method: 'POST',
             body: JSON.stringify({
@@ -100,12 +66,29 @@ const Main = () => {
         })
         .then(response => response.json())
         .then(responseData => {
-            dispatch({type: 'RESOLVE', responseData})
+            onResolve(responseData)
         })
         .catch(error => {
-            dispatch({type: 'REJECT', error})
-        })          
+            onReject(error)
+        })    
     }
+          
+}
+
+const Main = () => {
+    const [state, dispatch] = React.useReducer(tweetsReducer, initialState)
+    
+    useFetchTweets({
+        onResolve: responseData => dispatch({type: 'RESOLVE', responseData}),
+        onReject: error =>  dispatch({type: 'REJECT', error})
+    })
+    
+    const onSubmit = useSubmitTweet({
+        onStart: () => {},
+        onResolve: tweet => { dispatch({type: 'TWEETED', tweet }) },
+        onReject: error => { dispatch({type: 'REJECT', error}) } 
+    })
+    
     
     return (
         <main className="main">
@@ -116,6 +99,6 @@ const Main = () => {
     )
 }
 
-
+     
 
 export default Main
