@@ -30,7 +30,7 @@
     "postcss": "^8.2.10",
     "postcss-nesting": "^7.0.1",
     "tailwindcss": "^2.0.3",
-    "vite": "^2.1.5"
+    "vite": "^2.9.13"
   },
   "browserslist": [
     ">0.2%",
